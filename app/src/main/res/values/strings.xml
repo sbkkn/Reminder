@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Reminder</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="dont_show_splash">Don\'t show splash</string>
+</resources>
