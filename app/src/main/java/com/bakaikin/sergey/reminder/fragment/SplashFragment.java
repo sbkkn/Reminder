@@ -1,4 +1,4 @@
-package com.bakaikin.sergey.reminder;
+package com.bakaikin.sergey.reminder.fragment;
 
 
 import android.os.AsyncTask;
@@ -7,6 +7,8 @@ import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.bakaikin.sergey.reminder.R;
 
 import java.util.concurrent.TimeUnit;
 
@@ -34,7 +36,7 @@ public class SplashFragment extends Fragment {
     }
 
 
-    class SplashTask extends AsyncTask<Void,Void,Void>{
+    class SplashTask extends AsyncTask<Void, Void, Void> {
 
 
         @Override
@@ -45,7 +47,9 @@ public class SplashFragment extends Fragment {
                 e.printStackTrace();
             }
 
-            getActivity().getFragmentManager().popBackStack();
+            if (getActivity() != null) {
+                getActivity().getFragmentManager().popBackStack();
+            }
             return null;
         }
     }

@@ -1,13 +1,17 @@
 package com.bakaikin.sergey.reminder;
 
-import android.app.Activity;
 import android.app.FragmentManager;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewParent;
 
-
+import com.bakaikin.sergey.reminder.adapter.TabAdapter;
+import com.bakaikin.sergey.reminder.fragment.SplashFragment;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -27,6 +31,8 @@ public class MainActivity extends AppCompatActivity {
 
 
         runSplash();
+
+        setUI();
     }
 
     @Override
@@ -63,10 +69,46 @@ public class MainActivity extends AppCompatActivity {
 
 
             fragmentManager.beginTransaction()
-                    .replace(R.id.container, splashFragment)
+                    .replace(R.id.coordinator, splashFragment)
                     .addToBackStack(null)
                     .commit();
         }
+    }
+
+    public void setUI(){
+        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
+        toolbar.setTitleTextColor(getResources().getColor(R.color.white));
+        if(toolbar!=null){
+            setSupportActionBar(toolbar);
+        }
+
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.current_task));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.done_task));
+
+        final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
+        TabAdapter tabAdapter = new TabAdapter(fragmentManager,2);
+
+        viewPager.setAdapter(tabAdapter);
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+
+        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                viewPager.setCurrentItem(tab.getPosition());
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+
     }
 
 }
