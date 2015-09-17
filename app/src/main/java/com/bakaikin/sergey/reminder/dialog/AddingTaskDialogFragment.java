@@ -18,6 +18,7 @@ import android.widget.TimePicker;
 
 import com.bakaikin.sergey.reminder.R;
 import com.bakaikin.sergey.reminder.Utils;
+import com.bakaikin.sergey.reminder.model.ModelTask;
 
 import java.util.Calendar;
 
@@ -30,7 +31,7 @@ public class AddingTaskDialogFragment extends DialogFragment {
 
     public interface AddingTaskListner {
 
-        void onTaskAdded();
+        void onTaskAdded(ModelTask newTask);
 
         void onTaskCanceled();
     }
@@ -72,6 +73,10 @@ public class AddingTaskDialogFragment extends DialogFragment {
 
         builder.setView(container);
 
+        final ModelTask modelTask = new ModelTask();
+        final Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, calendar.get(Calendar.HOUR_OF_DAY) + 1);
+
         etDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -83,9 +88,10 @@ public class AddingTaskDialogFragment extends DialogFragment {
 
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        Calendar dateCalendar = Calendar.getInstance();
-                        dateCalendar.set(year, monthOfYear, dayOfMonth);
-                        etDate.setText(Utils.getDate(dateCalendar.getTimeInMillis()));
+                        calendar.set(Calendar.YEAR, year);
+                        calendar.set(Calendar.MONTH, monthOfYear);
+                        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                        etDate.setText(Utils.getDate(calendar.getTimeInMillis()));
                     }
 
                     @Override
@@ -112,9 +118,10 @@ public class AddingTaskDialogFragment extends DialogFragment {
 
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        Calendar timeCalendar = Calendar.getInstance();
-                        timeCalendar.set(0, 0, 0, hourOfDay, minute);
-                        etTime.setText(Utils.getTime(timeCalendar.getTimeInMillis()));
+                        calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                        calendar.set(Calendar.MINUTE, minute);
+                        calendar.set(Calendar.SECOND, 0);
+                        etTime.setText(Utils.getTime(calendar.getTimeInMillis()));
                     }
 
                     @Override
@@ -123,7 +130,7 @@ public class AddingTaskDialogFragment extends DialogFragment {
                     }
                 };
 
-                 timePickerFragment.show(getFragmentManager(), "timePickerFragment");
+                timePickerFragment.show(getFragmentManager(), "timePickerFragment");
             }
 
 
@@ -133,7 +140,11 @@ public class AddingTaskDialogFragment extends DialogFragment {
         builder.setPositiveButton(R.string.dialog_ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                addingTaskListner.onTaskAdded();
+                modelTask.setTitle(etTitle.getText().toString());
+                if (etDate.length() != 0 || etTime.length() != 0) {
+                    modelTask.setDate(calendar.getTimeInMillis());
+                }
+                addingTaskListner.onTaskAdded(modelTask);
                 dialog.dismiss();
             }
         });

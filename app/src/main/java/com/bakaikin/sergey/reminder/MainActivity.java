@@ -15,13 +15,21 @@ import android.widget.Toast;
 
 import com.bakaikin.sergey.reminder.adapter.TabAdapter;
 import com.bakaikin.sergey.reminder.dialog.AddingTaskDialogFragment;
+import com.bakaikin.sergey.reminder.fragment.CurrentTaskFragment;
+import com.bakaikin.sergey.reminder.fragment.DoneTaskFragment;
 import com.bakaikin.sergey.reminder.fragment.SplashFragment;
+import com.bakaikin.sergey.reminder.model.ModelTask;
 
 
 public class MainActivity extends AppCompatActivity implements AddingTaskDialogFragment.AddingTaskListner {
     FragmentManager fragmentManager;
 
     PreferenceHelper preferenceHelper;
+
+    TabAdapter tabAdapter;
+
+    CurrentTaskFragment currentTaskFragment;
+    DoneTaskFragment doneTaskFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,6 +122,9 @@ public class MainActivity extends AppCompatActivity implements AddingTaskDialogF
         });
 
 
+        currentTaskFragment = (CurrentTaskFragment) tabAdapter.getItem(TabAdapter.CURRENT_TASK_FRAGMENT_POSITION);
+        doneTaskFragment = (DoneTaskFragment) tabAdapter.getItem(TabAdapter.DONE_TASK_FRAGMENT_POSITION);
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -125,8 +136,8 @@ public class MainActivity extends AppCompatActivity implements AddingTaskDialogF
     }
 
     @Override
-    public void onTaskAdded() {
-        Toast.makeText(this, "Task added", Toast.LENGTH_LONG).show();
+    public void onTaskAdded(ModelTask newTask) {
+        currentTaskFragment.addTask(newTask);
     }
 
     @Override
