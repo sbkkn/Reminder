@@ -20,12 +20,12 @@ import com.bakaikin.sergey.reminder.fragment.DoneTaskFragment;
 import com.bakaikin.sergey.reminder.fragment.SplashFragment;
 import com.bakaikin.sergey.reminder.model.ModelTask;
 
+public class MainActivity extends AppCompatActivity
+        implements AddingTaskDialogFragment.AddingTaskListener {
 
-public class MainActivity extends AppCompatActivity implements AddingTaskDialogFragment.AddingTaskListner {
     FragmentManager fragmentManager;
 
     PreferenceHelper preferenceHelper;
-
     TabAdapter tabAdapter;
 
     CurrentTaskFragment currentTaskFragment;
@@ -41,7 +41,6 @@ public class MainActivity extends AppCompatActivity implements AddingTaskDialogF
 
         fragmentManager = getFragmentManager();
 
-
         runSplash();
 
         setUI();
@@ -52,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements AddingTaskDialogF
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         MenuItem splashItem = menu.findItem(R.id.action_splash);
-        splashItem.setChecked((preferenceHelper.getBoolean(PreferenceHelper.SPLASH_IS_INVISIBLE)));
+        splashItem.setChecked(preferenceHelper.getBoolean(PreferenceHelper.SPLASH_IS_INVISIBLE));
         return true;
     }
 
@@ -73,24 +72,23 @@ public class MainActivity extends AppCompatActivity implements AddingTaskDialogF
         return super.onOptionsItemSelected(item);
     }
 
-
     public void runSplash() {
-
-        if (!preferenceHelper.getBoolean(PreferenceHelper.SPLASH_IS_INVISIBLE)) {
+        if(!preferenceHelper.getBoolean(PreferenceHelper.SPLASH_IS_INVISIBLE)) {
             SplashFragment splashFragment = new SplashFragment();
 
-
             fragmentManager.beginTransaction()
-                    .replace(R.id.coordinator, splashFragment)
+                    .replace(R.id.content_frame, splashFragment)
                     .addToBackStack(null)
                     .commit();
         }
+
     }
 
-    public void setUI() {
+    private void setUI() {
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitleTextColor(getResources().getColor(R.color.white));
         if (toolbar != null) {
+            toolbar.setTitleTextColor(getResources().getColor(R.color.white));
             setSupportActionBar(toolbar);
         }
 
@@ -99,7 +97,7 @@ public class MainActivity extends AppCompatActivity implements AddingTaskDialogF
         tabLayout.addTab(tabLayout.newTab().setText(R.string.done_task));
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
-        TabAdapter tabAdapter = new TabAdapter(fragmentManager, 2);
+        tabAdapter = new TabAdapter(fragmentManager, 2);
 
         viewPager.setAdapter(tabAdapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
@@ -119,11 +117,14 @@ public class MainActivity extends AppCompatActivity implements AddingTaskDialogF
             public void onTabReselected(TabLayout.Tab tab) {
 
             }
-        });
 
+
+
+        });
 
         currentTaskFragment = (CurrentTaskFragment) tabAdapter.getItem(TabAdapter.CURRENT_TASK_FRAGMENT_POSITION);
         doneTaskFragment = (DoneTaskFragment) tabAdapter.getItem(TabAdapter.DONE_TASK_FRAGMENT_POSITION);
+
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -141,8 +142,8 @@ public class MainActivity extends AppCompatActivity implements AddingTaskDialogF
     }
 
     @Override
-    public void onTaskCanceled() {
-        Toast.makeText(this, "Task adding canceled", Toast.LENGTH_LONG).show();
+    public void onTaskAddingCancel() {
+        Toast.makeText(this, "Task adding cancel", Toast.LENGTH_LONG).show();
+
     }
 }
-

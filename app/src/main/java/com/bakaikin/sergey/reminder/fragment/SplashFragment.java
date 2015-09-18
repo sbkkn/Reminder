@@ -8,9 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.bakaikin.sergey.reminder.R;
-
 import java.util.concurrent.TimeUnit;
+
+import com.bakaikin.sergey.reminder.R;
 
 
 /**
@@ -27,17 +27,15 @@ public class SplashFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
 
         SplashTask splashTask = new SplashTask();
         splashTask.execute();
 
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_splash, container, false);
     }
 
-
     class SplashTask extends AsyncTask<Void, Void, Void> {
-
 
         @Override
         protected Void doInBackground(Void... params) {
@@ -50,7 +48,10 @@ public class SplashFragment extends Fragment {
             if (getActivity() != null) {
                 getActivity().getFragmentManager().popBackStack();
             }
+
             return null;
         }
     }
+
+
 }

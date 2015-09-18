@@ -1,16 +1,14 @@
 package com.bakaikin.sergey.reminder.adapter;
 
-import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.support.v13.app.FragmentStatePagerAdapter;
-import android.support.v4.view.PagerAdapter;
 
 import com.bakaikin.sergey.reminder.fragment.CurrentTaskFragment;
 import com.bakaikin.sergey.reminder.fragment.DoneTaskFragment;
 
 /**
- * Created by Sergey on 15.09.2015.
+ * Created by Vitaly on 18.08.2015.
  */
 public class TabAdapter extends FragmentStatePagerAdapter {
 
@@ -18,6 +16,7 @@ public class TabAdapter extends FragmentStatePagerAdapter {
 
     public static final int CURRENT_TASK_FRAGMENT_POSITION = 0;
     public static final int DONE_TASK_FRAGMENT_POSITION = 1;
+
     private CurrentTaskFragment currentTaskFragment;
     private DoneTaskFragment doneTaskFragment;
 
@@ -26,7 +25,6 @@ public class TabAdapter extends FragmentStatePagerAdapter {
         this.numberOfTabs = numberOfTabs;
         currentTaskFragment = new CurrentTaskFragment();
         doneTaskFragment = new DoneTaskFragment();
-
     }
 
     @Override
@@ -39,7 +37,6 @@ public class TabAdapter extends FragmentStatePagerAdapter {
                 return doneTaskFragment;
             default:
                 return null;
-
         }
     }
 

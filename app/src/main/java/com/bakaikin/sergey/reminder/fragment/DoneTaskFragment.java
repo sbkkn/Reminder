@@ -17,8 +17,9 @@ import com.bakaikin.sergey.reminder.R;
  */
 public class DoneTaskFragment extends Fragment {
 
-    private RecyclerView rvDoneTasks;
-    private RecyclerView.LayoutManager layoutManager;
+    RecyclerView rvDoneTasks;
+    RecyclerView.LayoutManager layoutManager;
+
 
     public DoneTaskFragment() {
         // Required empty public constructor
@@ -28,12 +29,15 @@ public class DoneTaskFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         View rootView = inflater.inflate(R.layout.fragment_done_task, container, false);
+
         rvDoneTasks = (RecyclerView) rootView.findViewById(R.id.rvDoneTasks);
+
         layoutManager = new LinearLayoutManager(getActivity());
         rvDoneTasks.setLayoutManager(layoutManager);
 
-
+        // Inflate the layout for this fragment
         return rootView;
     }
 

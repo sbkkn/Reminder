@@ -1,23 +1,27 @@
 package com.bakaikin.sergey.reminder.model;
 
-import android.view.MenuItem;
-
 /**
- * Created by Sergey on 17.09.2015.
+ * Created by Vitaly on 21.08.2015.
  */
-public class ModelTask implements Item {
+public class ModelTask implements Item{
 
     private String title;
     private long date;
 
-    public ModelTask(){
+    public ModelTask() {
 
     }
 
-    public ModelTask(String title, long date){
-        this.date = date;
+    public ModelTask(String title, long date) {
         this.title = title;
+        this.date = date;
     }
+
+    @Override
+    public boolean isTask() {
+        return true;
+    }
+
 
     public String getTitle() {
         return title;
@@ -33,10 +37,5 @@ public class ModelTask implements Item {
 
     public void setDate(long date) {
         this.date = date;
-    }
-
-    @Override
-    public boolean isTask() {
-        return false;
     }
 }

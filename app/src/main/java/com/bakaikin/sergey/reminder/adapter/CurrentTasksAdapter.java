@@ -6,26 +6,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.bakaikin.sergey.reminder.R;
 import com.bakaikin.sergey.reminder.Utils;
 import com.bakaikin.sergey.reminder.model.Item;
 import com.bakaikin.sergey.reminder.model.ModelTask;
 
-import org.w3c.dom.Text;
-
-import java.util.ArrayList;
-import java.util.List;
-
 /**
- * Created by Sergey on 17.09.2015.
+ * Created by Vitaly on 21.08.2015.
  */
 public class CurrentTasksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-
     List<Item> items = new ArrayList<>();
 
-    public static final int TYPE_TASK = 0;
-    public static final int TYPE_SEPARATOR = 1;
+    private static final int TYPE_TASK = 0;
+    private static final int TYPE_SEPARATOR = 1;
 
 
     public Item getItem(int position) {
@@ -42,14 +39,19 @@ public class CurrentTasksAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         notifyItemInserted(location);
     }
 
+
+
+
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
 
         switch (viewType) {
             case TYPE_TASK:
-                View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.model_task, viewGroup, false);
+                View v = LayoutInflater.from(viewGroup.getContext())
+                        .inflate(R.layout.model_task, viewGroup, false);
                 TextView title = (TextView) v.findViewById(R.id.tvTaskTitle);
                 TextView date = (TextView) v.findViewById(R.id.tvTaskDate);
+
                 return new TaskViewHolder(v, title, date);
             default:
                 return null;
@@ -59,6 +61,7 @@ public class CurrentTasksAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
         Item item = items.get(position);
+
         if (item.isTask()) {
             viewHolder.itemView.setEnabled(true);
             ModelTask task = (ModelTask) item;
@@ -79,15 +82,14 @@ public class CurrentTasksAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public int getItemViewType(int position) {
-        if (getItem(position).isTask())
+        if (getItem(position).isTask()) {
             return TYPE_TASK;
-        else
+        } else {
             return TYPE_SEPARATOR;
-
+        }
     }
 
     private class TaskViewHolder extends RecyclerView.ViewHolder {
-
         TextView title;
         TextView date;
 

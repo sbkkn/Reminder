@@ -4,9 +4,10 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 /**
- * Created by Sergey on 14.09.2015.
+ * Created by Vitaly on 16.08.2015.
  */
 public class PreferenceHelper {
+
     public static final String SPLASH_IS_INVISIBLE = "splash_is_invisible";
 
     private static PreferenceHelper instance;
@@ -15,29 +16,29 @@ public class PreferenceHelper {
 
     private SharedPreferences preferences;
 
-    private PreferenceHelper(){
+    private PreferenceHelper() {
 
     }
 
-    public static PreferenceHelper getInstance(){
-        if (instance==null){
+    public static PreferenceHelper getInstance() {
+        if (instance ==null) {
             instance = new PreferenceHelper();
         }
-            return instance;
+        return instance;
     }
 
-    public void init(Context context){
+    public void init(Context context) {
         this.context = context;
-        preferences = context.getSharedPreferences("preferences",Context.MODE_PRIVATE);
+        preferences = context.getSharedPreferences("preferences", Context.MODE_PRIVATE);
     }
 
-    public void putBoolean(String key,boolean value){
+    public void putBoolean(String key, boolean value) {
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean(key,value);
+        editor.putBoolean(key, value);
         editor.apply();
     }
 
-    public boolean getBoolean(String key){
-        return preferences.getBoolean(key,false);
+    public boolean getBoolean(String key) {
+        return preferences.getBoolean(key, false);
     }
 }
