@@ -22,7 +22,7 @@ import com.bakaikin.sergey.reminder.fragment.SplashFragment;
 import com.bakaikin.sergey.reminder.fragment.TaskFragment;
 import com.bakaikin.sergey.reminder.model.ModelTask;
 
-public class MainActivity extends AppCompatActivity
+public class MainActivity extends AppCompatActivity///branch mine
         implements AddingTaskDialogFragment.AddingTaskListener,
         CurrentTaskFragment.OnTaskDoneListner,
         DoneTaskFragment.OnTaskRestoreListner {
