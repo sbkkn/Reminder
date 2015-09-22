@@ -14,23 +14,28 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.bakaikin.sergey.reminder.adapter.TabAdapter;
+import com.bakaikin.sergey.reminder.database.DBHelper;
 import com.bakaikin.sergey.reminder.dialog.AddingTaskDialogFragment;
 import com.bakaikin.sergey.reminder.fragment.CurrentTaskFragment;
 import com.bakaikin.sergey.reminder.fragment.DoneTaskFragment;
 import com.bakaikin.sergey.reminder.fragment.SplashFragment;
+import com.bakaikin.sergey.reminder.fragment.TaskFragment;
 import com.bakaikin.sergey.reminder.model.ModelTask;
 
 public class MainActivity extends AppCompatActivity
-        implements AddingTaskDialogFragment.AddingTaskListener {
+        implements AddingTaskDialogFragment.AddingTaskListener,
+        CurrentTaskFragment.OnTaskDoneListner,
+        DoneTaskFragment.OnTaskRestoreListner {
 
     FragmentManager fragmentManager;
 
     PreferenceHelper preferenceHelper;
     TabAdapter tabAdapter;
 
-    CurrentTaskFragment currentTaskFragment;
-    DoneTaskFragment doneTaskFragment;
+    TaskFragment currentTaskFragment;
+    TaskFragment doneTaskFragment;
 
+    public DBHelper dbHelper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +43,8 @@ public class MainActivity extends AppCompatActivity
 
         PreferenceHelper.getInstance().init(getApplicationContext());
         preferenceHelper = PreferenceHelper.getInstance();
+
+        dbHelper = new DBHelper(getApplicationContext());
 
         fragmentManager = getFragmentManager();
 
@@ -73,7 +80,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void runSplash() {
-        if(!preferenceHelper.getBoolean(PreferenceHelper.SPLASH_IS_INVISIBLE)) {
+        if (!preferenceHelper.getBoolean(PreferenceHelper.SPLASH_IS_INVISIBLE)) {
             SplashFragment splashFragment = new SplashFragment();
 
             fragmentManager.beginTransaction()
@@ -119,7 +126,6 @@ public class MainActivity extends AppCompatActivity
             }
 
 
-
         });
 
         currentTaskFragment = (CurrentTaskFragment) tabAdapter.getItem(TabAdapter.CURRENT_TASK_FRAGMENT_POSITION);
@@ -138,12 +144,22 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onTaskAdded(ModelTask newTask) {
-        currentTaskFragment.addTask(newTask);
+        currentTaskFragment.addTask(newTask,true);
     }
 
     @Override
     public void onTaskAddingCancel() {
         Toast.makeText(this, "Task adding cancel", Toast.LENGTH_LONG).show();
 
+    }
+
+    @Override
+    public void onTaskDone(ModelTask task) {
+        doneTaskFragment.addTask(task,false);
+    }
+
+    @Override
+    public void onTaskRestore(ModelTask task) {
+        currentTaskFragment.addTask(task,false);
     }
 }
