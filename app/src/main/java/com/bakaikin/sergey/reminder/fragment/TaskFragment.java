@@ -13,6 +13,7 @@ import com.bakaikin.sergey.reminder.MainActivity;
 import com.bakaikin.sergey.reminder.R;
 import com.bakaikin.sergey.reminder.adapter.CurrentTasksAdapter;
 import com.bakaikin.sergey.reminder.adapter.TaskAdapter;
+import com.bakaikin.sergey.reminder.alarm.AlarmHelper;
 import com.bakaikin.sergey.reminder.database.DBHelper;
 import com.bakaikin.sergey.reminder.model.Item;
 import com.bakaikin.sergey.reminder.model.ModelTask;
@@ -29,6 +30,8 @@ public abstract class TaskFragment extends Fragment {
 
     public MainActivity activity;
 
+    public AlarmHelper alarmHelper;
+
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -37,6 +40,9 @@ public abstract class TaskFragment extends Fragment {
         if (getActivity() != null) {
             activity = (MainActivity) getActivity();
         }
+
+        alarmHelper = AlarmHelper.getInstanse();
+
         addTaskFromDB();
     }
 
@@ -103,6 +109,7 @@ public abstract class TaskFragment extends Fragment {
                         public void onViewDetachedFromWindow(View v) {
 
                             if (isRemoved[0]) {
+                                alarmHelper.removeAlarm(timeStamp);
                                 activity.dbHelper.removeTask(timeStamp);
                             }
                         }
@@ -123,6 +130,8 @@ public abstract class TaskFragment extends Fragment {
         dialogBuilder.show();
 
     }
+
+    public abstract void findTask(String title);
 
     public abstract void addTaskFromDB();
 

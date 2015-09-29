@@ -67,21 +67,38 @@ public class CurrentTaskFragment extends TaskFragment {
     }
 
     @Override
-    public void addTaskFromDB() {
+    public void findTask(String title) {
+
+        adapter.removeAllItems();
         List<ModelTask> tasks = new ArrayList<>();
-        tasks.addAll(activity.dbHelper.query().getTasks(DBHelper.SELECTION_STATUS + " OR " + DBHelper.SELECTION_STATUS,
-                        new String[]{Integer.toString(ModelTask.STATUS_CURRENT),
-                                     Integer.toString(ModelTask.STATUS_OVERDUE)}, DBHelper.TASK_DATE_COLUMN));
+        tasks.addAll(activity.dbHelper.query().getTasks(DBHelper.SELECTION_LIKE_TITLE + " AND "
+                        + DBHelper.SELECTION_STATUS + " OR " + DBHelper.SELECTION_STATUS,
+                new String[]{"%" + title + "%", Integer.toString(ModelTask.STATUS_CURRENT),
+                        Integer.toString(ModelTask.STATUS_OVERDUE)}, DBHelper.TASK_DATE_COLUMN));
 
         for (int i = 0; i < tasks.size(); i++) {
-            addTask(tasks.get(i),false);
+            addTask(tasks.get(i), false);
         }
-        
+
+    }
+
+    @Override
+    public void addTaskFromDB() {
+        adapter.removeAllItems();
+        List<ModelTask> tasks = new ArrayList<>();
+        tasks.addAll(activity.dbHelper.query().getTasks(DBHelper.SELECTION_STATUS + " OR " + DBHelper.SELECTION_STATUS,
+                new String[]{Integer.toString(ModelTask.STATUS_CURRENT),
+                        Integer.toString(ModelTask.STATUS_OVERDUE)}, DBHelper.TASK_DATE_COLUMN));
+
+        for (int i = 0; i < tasks.size(); i++) {
+            addTask(tasks.get(i), false);
+        }
+
     }
 
     @Override
     public void moveTask(ModelTask task) {
-
+        alarmHelper.removeAlarm(task.getTimeStamp());
         onTaskDoneListner.onTaskDone(task);
     }
 }

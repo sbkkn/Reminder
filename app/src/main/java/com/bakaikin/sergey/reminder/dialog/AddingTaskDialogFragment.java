@@ -23,6 +23,7 @@ import java.util.Calendar;
 
 import com.bakaikin.sergey.reminder.R;
 import com.bakaikin.sergey.reminder.Utils;
+import com.bakaikin.sergey.reminder.alarm.AlarmHelper;
 import com.bakaikin.sergey.reminder.model.ModelTask;
 
 /**
@@ -150,8 +151,12 @@ public class AddingTaskDialogFragment extends DialogFragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 task.setTitle(etTitle.getText().toString());
+                task.setStatus(ModelTask.STATUS_CURRENT);
                 if (etDate.length() != 0 || etTime.length() != 0) {
                     task.setDate(calendar.getTimeInMillis());
+
+                    AlarmHelper alarmHelper = AlarmHelper.getInstanse();
+                    alarmHelper.setAlarm(task);
                 }
                 task.setStatus(ModelTask.STATUS_CURRENT);
                 addingTaskListener.onTaskAdded(task);
