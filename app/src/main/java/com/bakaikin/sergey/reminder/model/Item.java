@@ -1,7 +1,7 @@
 package com.bakaikin.sergey.reminder.model;
 
 /**
- * Created by Vitaly on 21.08.2015.
+ * Created by Sergey on 19.09.2015.
  */
 public interface Item {
 

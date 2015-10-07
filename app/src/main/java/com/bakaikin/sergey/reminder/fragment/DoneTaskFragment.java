@@ -2,7 +2,6 @@ package com.bakaikin.sergey.reminder.fragment;
 
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -65,7 +64,8 @@ public class DoneTaskFragment extends TaskFragment {
     }
 
     @Override
-    public void findTask(String title) {
+    public void findTasks(String title) {
+        checkAdapter();
         adapter.removeAllItems();
         List<ModelTask> tasks = new ArrayList<>();
         tasks.addAll(activity.dbHelper.query().getTasks(DBHelper.SELECTION_LIKE_TITLE + " AND "
@@ -78,7 +78,16 @@ public class DoneTaskFragment extends TaskFragment {
     }
 
     @Override
+ public void checkAdapter() {
+        if (adapter == null) {
+            adapter = new DoneTaskAdapter(this);
+            addTaskFromDB();
+        }
+    }
+
+    @Override
     public void addTaskFromDB() {
+        checkAdapter();
         adapter.removeAllItems();
         List<ModelTask> tasks = new ArrayList<>();
         tasks.addAll(activity.dbHelper.query().getTasks(DBHelper.SELECTION_STATUS,
@@ -87,7 +96,33 @@ public class DoneTaskFragment extends TaskFragment {
         for (int i = 0; i < tasks.size(); i++) {
             addTask(tasks.get(i), false);
         }
+ }
 
+
+    @Override
+    public void addTask(ModelTask newTask, boolean saveToDB) {
+        int position = -1;
+        checkAdapter();
+
+        for (int i = 0; i < adapter.getItemCount(); i ++) {
+            if (adapter.getItem(i).isTask()) {
+                ModelTask task = (ModelTask) adapter.getItem(i);
+                if (newTask.getDate() < task.getDate()) {
+                    position = i;
+                    break;
+                }
+            }
+        }
+
+        if (position != -1) {
+            adapter.addItem(position, newTask);
+        } else {
+            adapter.addItem(newTask);
+        }
+
+        if (saveToDB) {
+            activity.dbHelper.saveTask(newTask);
+        }
     }
 
     @Override

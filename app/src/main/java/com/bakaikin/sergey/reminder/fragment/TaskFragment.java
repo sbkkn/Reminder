@@ -1,9 +1,9 @@
 package com.bakaikin.sergey.reminder.fragment;
 
 import android.app.AlertDialog;
+import android.app.DialogFragment;
 import android.app.Fragment;
 import android.content.DialogInterface;
-import android.graphics.AvoidXfermode;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
@@ -11,10 +11,9 @@ import android.view.View;
 
 import com.bakaikin.sergey.reminder.MainActivity;
 import com.bakaikin.sergey.reminder.R;
-import com.bakaikin.sergey.reminder.adapter.CurrentTasksAdapter;
 import com.bakaikin.sergey.reminder.adapter.TaskAdapter;
 import com.bakaikin.sergey.reminder.alarm.AlarmHelper;
-import com.bakaikin.sergey.reminder.database.DBHelper;
+import com.bakaikin.sergey.reminder.dialog.EditTaskDialogFragment;
 import com.bakaikin.sergey.reminder.model.Item;
 import com.bakaikin.sergey.reminder.model.ModelTask;
 
@@ -41,33 +40,15 @@ public abstract class TaskFragment extends Fragment {
             activity = (MainActivity) getActivity();
         }
 
-        alarmHelper = AlarmHelper.getInstanse();
+        alarmHelper = AlarmHelper.getInstance();
 
         addTaskFromDB();
     }
 
-    public void addTask(ModelTask newTask, boolean saveToDB) {
-        int position = -1;
+ public abstract void addTask(ModelTask newTask, boolean saveToDB);
 
-        for (int i = 0; i < adapter.getItemCount(); i++) {
-            if (adapter.getItem(i).isTask()) {
-                ModelTask task = (ModelTask) adapter.getItem(i);
-                if (newTask.getDate() < task.getDate()) {
-                    position = i;
-                    break;
-                }
-            }
-        }
-
-        if (position != -1) {
-            adapter.addItem(position, newTask);
-        } else {
-            adapter.addItem(newTask);
-        }
-
-        if (saveToDB) {
-            activity.dbHelper.saveTask(newTask);
-        }
+    public void updateTask(ModelTask task) {
+        adapter.updateTask(task);
     }
 
     public void removeTaskDialog(final int location) {
@@ -128,10 +109,17 @@ public abstract class TaskFragment extends Fragment {
             });
         }
         dialogBuilder.show();
+ }
 
+    public void showTaskEditDialog(ModelTask task) {
+        DialogFragment editingTaskDialog = EditTaskDialogFragment.newInstance(task);
+        editingTaskDialog.show(getActivity().getFragmentManager(), "EditTaskDialogFragment");
     }
 
-    public abstract void findTask(String title);
+
+    public abstract void findTasks(String title);
+
+    public abstract void checkAdapter();
 
     public abstract void addTaskFromDB();
 

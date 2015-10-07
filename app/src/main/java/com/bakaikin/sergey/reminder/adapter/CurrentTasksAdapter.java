@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import com.bakaikin.sergey.reminder.R;
@@ -20,12 +21,13 @@ import com.bakaikin.sergey.reminder.Utils;
 import com.bakaikin.sergey.reminder.fragment.CurrentTaskFragment;
 import com.bakaikin.sergey.reminder.fragment.TaskFragment;
 import com.bakaikin.sergey.reminder.model.Item;
+import com.bakaikin.sergey.reminder.model.ModelSeparator;
 import com.bakaikin.sergey.reminder.model.ModelTask;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
- * Created by Vitaly on 21.08.2015.
+ * Created by Sergey on 19.09.2015.
  */
 public class CurrentTasksAdapter extends TaskAdapter {
 
@@ -64,6 +66,12 @@ public class CurrentTasksAdapter extends TaskAdapter {
                 CircleImageView priority = (CircleImageView) v.findViewById(R.id.cvTaskPriority);
 
                 return new TaskViewHolder(v, title, date, priority);
+case TYPE_SEPARATOR:
+                View separator = LayoutInflater.from(viewGroup.getContext())
+                        .inflate(R.layout.model_separator, viewGroup, false);
+                TextView type = (TextView) separator.findViewById(R.id.tvSeparatorName);
+
+                return new SeparatorViewHolder(separator, type);
             default:
                 return null;
         }
@@ -73,13 +81,14 @@ public class CurrentTasksAdapter extends TaskAdapter {
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
         Item item = items.get(position);
 
+        Resources resources = viewHolder.itemView.getResources();
         if (item.isTask()) {
             viewHolder.itemView.setEnabled(true);
             final ModelTask task = (ModelTask) item;
             final TaskViewHolder taskViewHolder = (TaskViewHolder) viewHolder;
 
             final View itemView = taskViewHolder.itemView;
-            final Resources resources = itemView.getResources();
+            resources = itemView.getResources();
 
             taskViewHolder.title.setText(task.getTitle());
             if (task.getDate() != 0) {
@@ -92,11 +101,22 @@ public class CurrentTasksAdapter extends TaskAdapter {
 
             taskViewHolder.priority.setEnabled(true);
 
+ if (task.getDate() != 0 && task.getDate() < Calendar.getInstance().getTimeInMillis()) {
+                itemView.setBackgroundColor(resources.getColor(R.color.gray_200));
+            } else {
+                itemView.setBackgroundColor(resources.getColor(R.color.gray_50));
+            }
             taskViewHolder.title.setTextColor(resources.getColor(R.color.primary_text_default_material_light));
             taskViewHolder.date.setTextColor(resources.getColor(R.color.secondary_text_default_material_light));
             taskViewHolder.priority.setColorFilter(resources.getColor(task.getPrioriryColor()));
             taskViewHolder.priority.setImageResource(R.drawable.ic_checkbox_blank_circle_white_48dp);
 
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    getTaskFragment().showTaskEditDialog(task);
+                }
+            });
             itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
@@ -110,18 +130,18 @@ public class CurrentTasksAdapter extends TaskAdapter {
                     return true;
                 }
             });
+            final Resources finalResources = resources;
             taskViewHolder.priority.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     taskViewHolder.priority.setEnabled(false);
                     task.setStatus(ModelTask.STATUS_DONE);
+getTaskFragment().activity.dbHelper.update().status(task.getTimeStamp(), ModelTask.STATUS_DONE);
 
-                    getTaskFragment().activity.dbHelper.update().status(task.getTimeStamp(),ModelTask.STATUS_DONE);
 
-
-                    taskViewHolder.title.setTextColor(resources.getColor(R.color.primary_text_disabled_material_light));
-                    taskViewHolder.date.setTextColor(resources.getColor(R.color.secondary_text_disabled_material_light));
-                    taskViewHolder.priority.setColorFilter(resources.getColor(task.getPrioriryColor()));
+                    taskViewHolder.title.setTextColor(finalResources.getColor(R.color.primary_text_disabled_material_light));
+                    taskViewHolder.date.setTextColor(finalResources.getColor(R.color.secondary_text_disabled_material_light));
+                    taskViewHolder.priority.setColorFilter(finalResources.getColor(task.getPrioriryColor()));
 
                     ObjectAnimator flipIn = ObjectAnimator.ofFloat(taskViewHolder.priority, "rotationY", -180f, 0f);
                     flipIn.addListener(new Animator.AnimatorListener() {
@@ -183,8 +203,16 @@ public class CurrentTasksAdapter extends TaskAdapter {
                     });
 
                     flipIn.start();
+                
+
                 }
             });
+        } else {
+
+            ModelSeparator separator = (ModelSeparator) item;
+            SeparatorViewHolder separatorViewHolder = (SeparatorViewHolder) viewHolder;
+
+            separatorViewHolder.type.setText(resources.getString(separator.getType()));
         }
 
     }

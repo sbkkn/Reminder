@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 /**
- * Created by Vitaly on 16.08.2015.
+ * Created by Sergey on 19.09.2015.
  */
 public class PreferenceHelper {
 

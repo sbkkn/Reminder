@@ -11,15 +11,16 @@ import com.bakaikin.sergey.reminder.model.ModelTask;
  * Created by Sergey on 27.09.2015.
  */
 public class AlarmHelper {
-    private static AlarmHelper instanse;
+
+    private static AlarmHelper instance;
     private Context context;
     private AlarmManager alarmManager;
 
-    public static AlarmHelper getInstanse() {
-        if (instanse == null) {
-            instanse = new AlarmHelper();
+    public static AlarmHelper getInstance() {
+        if (instance == null) {
+            instance = new AlarmHelper();
         }
-        return instanse;
+        return instance;
     }
 
 

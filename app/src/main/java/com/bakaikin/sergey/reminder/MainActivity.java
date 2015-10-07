@@ -3,6 +3,7 @@ package com.bakaikin.sergey.reminder;
 import android.app.DialogFragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -18,6 +19,7 @@ import com.bakaikin.sergey.reminder.adapter.TabAdapter;
 import com.bakaikin.sergey.reminder.alarm.AlarmHelper;
 import com.bakaikin.sergey.reminder.database.DBHelper;
 import com.bakaikin.sergey.reminder.dialog.AddingTaskDialogFragment;
+import com.bakaikin.sergey.reminder.dialog.EditTaskDialogFragment;
 import com.bakaikin.sergey.reminder.fragment.CurrentTaskFragment;
 import com.bakaikin.sergey.reminder.fragment.DoneTaskFragment;
 import com.bakaikin.sergey.reminder.fragment.SplashFragment;
@@ -26,8 +28,8 @@ import com.bakaikin.sergey.reminder.model.ModelTask;
 
 public class MainActivity extends AppCompatActivity
         implements AddingTaskDialogFragment.AddingTaskListener,
-        CurrentTaskFragment.OnTaskDoneListner,
-        DoneTaskFragment.OnTaskRestoreListner {
+        CurrentTaskFragment.OnTaskDoneListner, DoneTaskFragment.OnTaskRestoreListner,
+        EditTaskDialogFragment.EditingTaskListener {
 
     FragmentManager fragmentManager;
 
@@ -45,10 +47,11 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        com.bakaikin.sergey.reminder.Ads.showBanner(this);
         PreferenceHelper.getInstance().init(getApplicationContext());
         preferenceHelper = PreferenceHelper.getInstance();
 
-        AlarmHelper.getInstanse().init(getApplicationContext());
+        AlarmHelper.getInstance().init(getApplicationContext());
 
         dbHelper = new DBHelper(getApplicationContext());
 
@@ -57,6 +60,11 @@ public class MainActivity extends AppCompatActivity
         runSplash();
 
         setUI();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+
     }
 
     @Override
@@ -159,8 +167,8 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                currentTaskFragment.findTask(newText);
-                doneTaskFragment.findTask(newText);
+                currentTaskFragment.findTasks(newText);
+                doneTaskFragment.findTasks(newText);
                 return false;
             }
         });
@@ -189,11 +197,17 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onTaskDone(ModelTask task) {
-        doneTaskFragment.addTask(task,false);
+        doneTaskFragment.addTask(task, false);
     }
 
     @Override
     public void onTaskRestore(ModelTask task) {
         currentTaskFragment.addTask(task,false);
+    }
+
+    @Override
+    public void onTaskEdited(ModelTask updatedTask) {
+        currentTaskFragment.updateTask(updatedTask);
+        dbHelper.update().task(updatedTask);
     }
 }

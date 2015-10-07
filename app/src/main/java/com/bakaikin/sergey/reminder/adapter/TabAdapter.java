@@ -8,7 +8,7 @@ import com.bakaikin.sergey.reminder.fragment.CurrentTaskFragment;
 import com.bakaikin.sergey.reminder.fragment.DoneTaskFragment;
 
 /**
- * Created by Vitaly on 18.08.2015.
+ * Created by Sergey on 19.09.2015.
  */
 public class TabAdapter extends FragmentStatePagerAdapter {
 

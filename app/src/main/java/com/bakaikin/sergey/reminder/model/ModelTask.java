@@ -5,7 +5,7 @@ import com.bakaikin.sergey.reminder.R;
 import java.util.Date;
 
 /**
- * Created by Vitaly on 21.08.2015.
+ * Created by Sergey on 19.09.2015.
  */
 public class ModelTask implements Item {
 
@@ -24,36 +24,14 @@ public class ModelTask implements Item {
     private int priority;
     private int status;
     private long timeStamp;
+    private int dateStatus;
 
     public ModelTask() {
         this.status = -1;
         this.timeStamp = new Date().getTime();
     }
 
-    public int getPriority() {
-        return priority;
-    }
-
-    public void setPriority(int priority) {
-        this.priority = priority;
-    }
-
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
-    }
-
-
-    public long getTimeStamp() {
-        return timeStamp;
-    }
-
-    public void setTimeStamp(long timeStamp) {
-        this.timeStamp = timeStamp;
-    }
+  
 
     public ModelTask(String title, long date, int priority, int status,long timeStamp) {
         this.title = title;
@@ -108,5 +86,37 @@ public class ModelTask implements Item {
 
     public void setDate(long date) {
         this.date = date;
+    }
+
+ public int getPriority() {
+        return priority;
+    }
+
+    public void setPriority(int priority) {
+        this.priority = priority;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public long getTimeStamp() {
+        return timeStamp;
+    }
+
+    public void setTimeStamp(long timeStamp) {
+        this.timeStamp = timeStamp;
+    }
+
+    public int getDateStatus() {
+        return dateStatus;
+    }
+
+    public void setDateStatus(int dateStatus) {
+        this.dateStatus = dateStatus;
     }
 }

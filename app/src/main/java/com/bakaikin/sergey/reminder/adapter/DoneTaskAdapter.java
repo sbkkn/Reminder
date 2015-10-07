@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.bakaikin.sergey.reminder.R;
 import com.bakaikin.sergey.reminder.Utils;
+import com.bakaikin.sergey.reminder.fragment.DoneTaskFragment;
 import com.bakaikin.sergey.reminder.fragment.TaskFragment;
 import com.bakaikin.sergey.reminder.model.Item;
 import com.bakaikin.sergey.reminder.model.ModelTask;
@@ -24,7 +25,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 public class DoneTaskAdapter extends TaskAdapter {
 
-    public DoneTaskAdapter(TaskFragment taskFragment) {
+
+    public DoneTaskAdapter(DoneTaskFragment taskFragment) {
         super(taskFragment);
     }
 
@@ -89,8 +91,9 @@ public class DoneTaskAdapter extends TaskAdapter {
                 public void onClick(View v) {
                     taskViewHolder.priority.setEnabled(false);
                     task.setStatus(ModelTask.STATUS_CURRENT);
+getTaskFragment().activity.dbHelper.update().status(task.getTimeStamp(), ModelTask.STATUS_CURRENT);
 
-                    getTaskFragment().activity.dbHelper.update().status(task.getTimeStamp(),ModelTask.STATUS_CURRENT);
+
 
                     taskViewHolder.title.setTextColor(resources.getColor(R.color.primary_text_default_material_light));
                     taskViewHolder.date.setTextColor(resources.getColor(R.color.secondary_text_default_material_light));
@@ -140,8 +143,8 @@ public class DoneTaskAdapter extends TaskAdapter {
                                 AnimatorSet translationSet = new AnimatorSet();
                                 translationSet.play(translationX).before(translationXBack);
                                 translationSet.start();
+  }
 
-                            }
                         }
 
                         @Override
