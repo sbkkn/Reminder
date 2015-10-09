@@ -9,13 +9,13 @@ import android.content.Intent;
 import android.support.v7.app.NotificationCompat;
 
 import com.bakaikin.sergey.reminder.MainActivity;
-import com.bakaikin.sergey.reminder.MyAppliction;
+import com.bakaikin.sergey.reminder.MyApplication;
 import com.bakaikin.sergey.reminder.R;
 
 /**
  * Created by Sergey on 27.09.2015.
  */
-public class AlarmReciever extends BroadcastReceiver {
+public class AlarmReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         String title = intent.getStringExtra("title");
@@ -24,13 +24,13 @@ public class AlarmReciever extends BroadcastReceiver {
 
         Intent resultIntent = new Intent(context, MainActivity.class);
 
-        if (MyAppliction.isActivityVisible()){
+        if (MyApplication.isActivityVisible()) {
             resultIntent = intent;
         }
 
         resultIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, (int) timeStamp,resultIntent,PendingIntent.FLAG_UPDATE_CURRENT);
+PendingIntent pendingIntent = PendingIntent.getActivity(context, (int) timeStamp,
+                resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
         builder.setContentTitle("Reminder");

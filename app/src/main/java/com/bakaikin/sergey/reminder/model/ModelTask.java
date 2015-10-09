@@ -41,7 +41,7 @@ public class ModelTask implements Item {
         this.timeStamp = timeStamp;
     }
 
-    public int getPrioriryColor() {
+    public int getPriorityColor() {
         switch (getPriority()) {
             case PRIORITY_HIGH:
                 if (getStatus() == STATUS_CURRENT || getStatus() == STATUS_OVERDUE) {

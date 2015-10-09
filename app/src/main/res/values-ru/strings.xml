@@ -19,7 +19,7 @@
     <string name="done_task">Выполненные</string>
     <string name="dont_show_splash">Не показывать экран приветствия</string>
     <string name="removed">Удалено</string>
-    <string name="separator_future">Будующие</string>
+    <string name="separator_future">Будущие</string>
     <string name="separator_overdue">Прошедшие</string>
     <string name="separator_today">Сегодняшние</string>
     <string name="task_title">Заголовок</string>

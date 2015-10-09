@@ -11,10 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.lang.annotation.Annotation;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 import com.bakaikin.sergey.reminder.R;
 import com.bakaikin.sergey.reminder.Utils;
@@ -39,19 +36,6 @@ public class CurrentTasksAdapter extends TaskAdapter {
     }
 
 
-    public Item getItem(int position) {
-        return items.get(position);
-    }
-
-    public void addItem(Item item) {
-        items.add(item);
-        notifyItemInserted(getItemCount() - 1);
-    }
-
-    public void addItem(int location, Item item) {
-        items.add(location, item);
-        notifyItemInserted(location);
-    }
 
 
     @Override
@@ -81,14 +65,14 @@ case TYPE_SEPARATOR:
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
         Item item = items.get(position);
 
-        Resources resources = viewHolder.itemView.getResources();
+        final Resources resources = viewHolder.itemView.getResources();
         if (item.isTask()) {
             viewHolder.itemView.setEnabled(true);
             final ModelTask task = (ModelTask) item;
             final TaskViewHolder taskViewHolder = (TaskViewHolder) viewHolder;
 
             final View itemView = taskViewHolder.itemView;
-            resources = itemView.getResources();
+
 
             taskViewHolder.title.setText(task.getTitle());
             if (task.getDate() != 0) {
@@ -108,7 +92,7 @@ case TYPE_SEPARATOR:
             }
             taskViewHolder.title.setTextColor(resources.getColor(R.color.primary_text_default_material_light));
             taskViewHolder.date.setTextColor(resources.getColor(R.color.secondary_text_default_material_light));
-            taskViewHolder.priority.setColorFilter(resources.getColor(task.getPrioriryColor()));
+            taskViewHolder.priority.setColorFilter(resources.getColor(task.getPriorityColor()));
             taskViewHolder.priority.setImageResource(R.drawable.ic_checkbox_blank_circle_white_48dp);
 
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -130,7 +114,7 @@ case TYPE_SEPARATOR:
                     return true;
                 }
             });
-            final Resources finalResources = resources;
+
             taskViewHolder.priority.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -139,9 +123,9 @@ case TYPE_SEPARATOR:
 getTaskFragment().activity.dbHelper.update().status(task.getTimeStamp(), ModelTask.STATUS_DONE);
 
 
-                    taskViewHolder.title.setTextColor(finalResources.getColor(R.color.primary_text_disabled_material_light));
-                    taskViewHolder.date.setTextColor(finalResources.getColor(R.color.secondary_text_disabled_material_light));
-                    taskViewHolder.priority.setColorFilter(finalResources.getColor(task.getPrioriryColor()));
+                    taskViewHolder.title.setTextColor(resources.getColor(R.color.primary_text_disabled_material_light));
+                    taskViewHolder.date.setTextColor(resources.getColor(R.color.secondary_text_disabled_material_light));
+                    taskViewHolder.priority.setColorFilter(resources.getColor(task.getPriorityColor()));
 
                     ObjectAnimator flipIn = ObjectAnimator.ofFloat(taskViewHolder.priority, "rotationY", -180f, 0f);
                     flipIn.addListener(new Animator.AnimatorListener() {
@@ -187,8 +171,8 @@ getTaskFragment().activity.dbHelper.update().status(task.getTimeStamp(), ModelTa
                                 AnimatorSet translationSet = new AnimatorSet();
                                 translationSet.play(translationX).before(translationXBack);
                                 translationSet.start();
-
                             }
+                            
                         }
 
                         @Override
@@ -225,5 +209,4 @@ getTaskFragment().activity.dbHelper.update().status(task.getTimeStamp(), ModelTa
             return TYPE_SEPARATOR;
         }
     }
-
 }

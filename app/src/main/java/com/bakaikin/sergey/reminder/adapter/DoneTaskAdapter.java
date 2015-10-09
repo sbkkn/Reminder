@@ -14,7 +14,6 @@ import android.widget.TextView;
 import com.bakaikin.sergey.reminder.R;
 import com.bakaikin.sergey.reminder.Utils;
 import com.bakaikin.sergey.reminder.fragment.DoneTaskFragment;
-import com.bakaikin.sergey.reminder.fragment.TaskFragment;
 import com.bakaikin.sergey.reminder.model.Item;
 import com.bakaikin.sergey.reminder.model.ModelTask;
 
@@ -69,7 +68,7 @@ public class DoneTaskAdapter extends TaskAdapter {
 
             taskViewHolder.title.setTextColor(resources.getColor(R.color.primary_text_disabled_material_light));
             taskViewHolder.date.setTextColor(resources.getColor(R.color.secondary_text_disabled_material_light));
-            taskViewHolder.priority.setColorFilter(resources.getColor(task.getPrioriryColor()));
+            taskViewHolder.priority.setColorFilter(resources.getColor(task.getPriorityColor()));
             taskViewHolder.priority.setImageResource(R.drawable.ic_check_circle_white_48dp);
 
             itemView.setOnLongClickListener(new View.OnLongClickListener() {
@@ -97,7 +96,7 @@ getTaskFragment().activity.dbHelper.update().status(task.getTimeStamp(), ModelTa
 
                     taskViewHolder.title.setTextColor(resources.getColor(R.color.primary_text_default_material_light));
                     taskViewHolder.date.setTextColor(resources.getColor(R.color.secondary_text_default_material_light));
-                    taskViewHolder.priority.setColorFilter(resources.getColor(task.getPrioriryColor()));
+                    taskViewHolder.priority.setColorFilter(resources.getColor(task.getPriorityColor()));
 
                     ObjectAnimator flipIn = ObjectAnimator.ofFloat(taskViewHolder.priority, "rotationY", 180f, 0f);
                     taskViewHolder.priority.setImageResource(R.drawable.ic_checkbox_blank_circle_white_48dp);

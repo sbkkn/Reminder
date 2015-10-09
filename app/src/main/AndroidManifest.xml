@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.bakaikin.sergey.reminder">
+    package="com.bakaikin.sergey.reminder"
+    android:versionCode="2"
+    android:versionName="1.1">
 
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="ANDROID.PERMISSION.INTERNET" />
@@ -32,7 +34,7 @@
             android:theme="@android:style/Theme.Translucent" />
 
         <receiver
-            android:name=".alarm.AlarmReciever"
+            android:name=".alarm.AlarmReceiver"
             android:process=":remote" />
 
         <receiver android:name=".alarm.AlarmSetter">

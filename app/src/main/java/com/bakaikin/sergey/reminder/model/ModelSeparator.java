@@ -1,7 +1,5 @@
 package com.bakaikin.sergey.reminder.model;
 
-import com.bakaikin.sergey.reminder.model.Item;
-
 import com.bakaikin.sergey.reminder.R;
 
 /**

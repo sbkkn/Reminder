@@ -70,13 +70,13 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
-        MyAppliction.activityResumed();
+        MyApplication.activityResumed();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        MyAppliction.activityPaused();
+        MyApplication.activityPaused();
     }
 
     @Override

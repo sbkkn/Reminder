@@ -5,7 +5,7 @@ import android.app.Application;
 /**
  * Created by Sergey on 27.09.2015.
  */
-public class MyAppliction extends Application {
+public class MyApplication extends Application {
 
     private static boolean activityVisible;
 

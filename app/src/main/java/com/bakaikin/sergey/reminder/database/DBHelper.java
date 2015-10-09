@@ -47,7 +47,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE " + DATABASE_NAME);
+        db.execSQL("DROP TABLE " + TASK_TABLE);
         onCreate(db);
     }
 
@@ -71,6 +71,6 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     public void removeTask(long timeStamp) {
-        getWritableDatabase().delete(TASK_TABLE,TASK_TIME_STAMP_COLUMN,new String[]{Long.toString(timeStamp)});
+        getWritableDatabase().delete(TASK_TABLE, SELECTION_TIME_STAMP, new String[]{Long.toString(timeStamp)});
     }
 }

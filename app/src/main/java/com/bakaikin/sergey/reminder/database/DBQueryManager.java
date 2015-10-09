@@ -5,7 +5,6 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.bakaikin.sergey.reminder.model.ModelTask;
 
-import java.sql.SQLData;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,6 +37,7 @@ public class DBQueryManager {
 
     public List<ModelTask> getTasks(String selection, String[] selectionArgs, String orderBy) {
         List<ModelTask> tasks = new ArrayList<>();
+
         Cursor c = database.query(DBHelper.TASK_TABLE, null, selection, selectionArgs, null, null, orderBy);
 
         if (c.moveToFirst()) {
@@ -59,6 +59,4 @@ public class DBQueryManager {
 
         return tasks;
     }
-
-
 }
