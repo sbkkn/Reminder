@@ -1,6 +1,5 @@
 package com.bakaikin.sergey.reminder.adapter;
 
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
@@ -12,6 +11,7 @@ import com.bakaikin.sergey.reminder.model.ModelTask;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.recyclerview.widget.RecyclerView;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**

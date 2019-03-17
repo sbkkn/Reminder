@@ -1,12 +1,9 @@
 package com.bakaikin.sergey.reminder.fragment;
 
 import android.app.AlertDialog;
-import android.app.DialogFragment;
-import android.app.Fragment;
+import androidx.fragment.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.bakaikin.sergey.reminder.MainActivity;
@@ -16,6 +13,10 @@ import com.bakaikin.sergey.reminder.alarm.AlarmHelper;
 import com.bakaikin.sergey.reminder.dialog.EditTaskDialogFragment;
 import com.bakaikin.sergey.reminder.model.Item;
 import com.bakaikin.sergey.reminder.model.ModelTask;
+import com.google.android.material.snackbar.Snackbar;
+
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * Created by Sergey on 18.09.2015.
@@ -113,7 +114,7 @@ public abstract class TaskFragment extends Fragment {
 
     public void showTaskEditDialog(ModelTask task) {
         DialogFragment editingTaskDialog = EditTaskDialogFragment.newInstance(task);
-        editingTaskDialog.show(getActivity().getFragmentManager(), "EditTaskDialogFragment");
+        editingTaskDialog.show(getActivity().getSupportFragmentManager(), "EditTaskDialogFragment");
     }
 
 

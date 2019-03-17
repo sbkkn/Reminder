@@ -1,12 +1,13 @@
 package com.bakaikin.sergey.reminder.dialog;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.DialogFragment;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatDialog;
+import androidx.fragment.app.DialogFragment;
+
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.design.widget.TextInputLayout;
+
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -25,6 +26,7 @@ import com.bakaikin.sergey.reminder.R;
 import com.bakaikin.sergey.reminder.Utils;
 import com.bakaikin.sergey.reminder.alarm.AlarmHelper;
 import com.bakaikin.sergey.reminder.model.ModelTask;
+import com.google.android.material.textfield.TextInputLayout;
 
 /**
  * Created by Sergey on 19.09.2015.
@@ -49,7 +51,7 @@ public class AddingTaskDialogFragment extends DialogFragment {
     }
 
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
+    public AppCompatDialog onCreateDialog(Bundle savedInstanceState) {
 
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 

@@ -3,7 +3,6 @@ package com.bakaikin.sergey.reminder.fragment;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +10,8 @@ import android.view.ViewGroup;
 import java.util.concurrent.TimeUnit;
 
 import com.bakaikin.sergey.reminder.R;
+
+import androidx.fragment.app.Fragment;
 
 
 /**

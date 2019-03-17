@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilDialogTaskTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -16,14 +16,14 @@
             android:layout_marginRight="16dp"
             android:layout_marginTop="16dp">
 
-            <EditText
+            <androidx.appcompat.widget.AppCompatEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="16sp" />
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilDialogTaskDate"
             android:layout_width="130dp"
             android:layout_height="wrap_content"
@@ -32,7 +32,7 @@
             android:layout_marginLeft="16dp"
             android:layout_marginBottom="16dp">
 
-            <EditText
+            <androidx.appcompat.widget.AppCompatEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
@@ -40,9 +40,9 @@
                 android:focusableInTouchMode="false"
                 android:cursorVisible="false"/>
 
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilDialogTaskTime"
             android:layout_width="130dp"
             android:layout_height="wrap_content"
@@ -50,7 +50,7 @@
             android:layout_alignRight="@+id/tilDialogTaskTitle"
             android:layout_marginTop="16dp">
 
-            <EditText
+            <androidx.appcompat.widget.AppCompatEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
@@ -58,10 +58,10 @@
                 android:focusableInTouchMode="false"
                 android:cursorVisible="false"/>
 
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
 
-        <Spinner
+        <androidx.appcompat.widget.AppCompatSpinner
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/spDialogTaskPriority"
