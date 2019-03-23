@@ -1,11 +1,11 @@
 package com.bakaikin.sergey.reminder;
 
-import androidx.fragment.app.DialogFragment;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.bakaikin.sergey.reminder.adapter.TabAdapter;
@@ -18,17 +18,19 @@ import com.bakaikin.sergey.reminder.fragment.DoneTaskFragment;
 import com.bakaikin.sergey.reminder.fragment.SplashFragment;
 import com.bakaikin.sergey.reminder.fragment.TaskFragment;
 import com.bakaikin.sergey.reminder.model.ModelTask;
+import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.viewpager.widget.ViewPager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.Unbinder;
 
 public class MainActivity extends AppCompatActivity
         implements AddingTaskDialogFragment.AddingTaskListener,
@@ -43,12 +45,24 @@ public class MainActivity extends AppCompatActivity
     TaskFragment currentTaskFragment;
     TaskFragment doneTaskFragment;
 
-    @BindView(R.id.search_view)SearchView searchView;
-    @BindView(R.id.fab)FloatingActionButton fab;
-    @BindView(R.id.toolbar)Toolbar toolbar;
-    @BindView(R.id.tab_layout)TabLayout tabLayout;
-    @BindView(R.id.pager)ViewPager viewPager;
+    @BindView(R.id.search_view)
+    SearchView searchView;
+    @BindView(R.id.fab)
+    FloatingActionButton fab;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.tab_layout)
+    TabLayout tabLayout;
+    @BindView(R.id.pager)
+    ViewPager viewPager;
     public DBHelper dbHelper;
+    @BindView(R.id.app_bar_layout)
+    AppBarLayout appBarLayout;
+    @BindView(R.id.coordinator)
+    CoordinatorLayout coordinator;
+    @BindView(R.id.content_frame)
+    FrameLayout contentFrame;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -186,7 +200,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onTaskAdded(ModelTask newTask) {
-        currentTaskFragment.addTask(newTask,true);
+        currentTaskFragment.addTask(newTask, true);
     }
 
     @Override
@@ -202,7 +216,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onTaskRestore(ModelTask task) {
-        currentTaskFragment.addTask(task,false);
+        currentTaskFragment.addTask(task, false);
     }
 
     @Override

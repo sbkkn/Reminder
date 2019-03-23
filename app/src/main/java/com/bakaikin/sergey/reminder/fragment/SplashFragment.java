@@ -41,13 +41,18 @@ public class SplashFragment extends Fragment {
         @Override
         protected Void doInBackground(Void... params) {
             try {
+                for (int i = 0; i < 1000; i++) {
+                    System.out.println(i);
+                }
                 TimeUnit.SECONDS.sleep(2);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
 
             if (getActivity() != null) {
-                getActivity().getFragmentManager().popBackStack();
+                if (getActivity().getSupportFragmentManager().getBackStackEntryCount() > 0){
+                    getActivity().getSupportFragmentManager().popBackStack();
+                }
             }
 
             return null;

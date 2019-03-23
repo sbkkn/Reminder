@@ -1,9 +1,7 @@
 package com.bakaikin.sergey.reminder.fragment;
 
-
 import android.app.Activity;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,18 +18,18 @@ import java.util.List;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import butterknife.BindView;
+import butterknife.OnClick;
 
-
-/**
- * A simple {@link Fragment} subclass.
- */
 public class CurrentTaskFragment extends TaskFragment {
 
-    public CurrentTaskFragment() {
-        // Required empty public constructor
-    }
+    @BindView(R.id.rvCurentTasks)
+    RecyclerView rvCurentTasks;
+    private OnTaskDoneListner onTaskDoneListner;
 
-    OnTaskDoneListner onTaskDoneListner;
+    @OnClick(R.id.rvCurentTasks)
+    public void onViewClicked() {
+    }
 
     public interface OnTaskDoneListner {
         void onTaskDone(ModelTask task);
@@ -53,6 +51,7 @@ public class CurrentTaskFragment extends TaskFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
 
         View rootView = inflater.inflate(R.layout.fragment_current_task, container, false);
 
@@ -84,7 +83,8 @@ public class CurrentTaskFragment extends TaskFragment {
             addTask(tasks.get(i), false);
         }
     }
- @Override
+
+    @Override
     public void checkAdapter() {
         if (adapter == null) {
             adapter = new CurrentTasksAdapter(this);
@@ -92,7 +92,7 @@ public class CurrentTaskFragment extends TaskFragment {
         }
     }
 
- @Override
+    @Override
     public void addTaskFromDB() {
         checkAdapter();
         adapter.removeAllItems();
@@ -112,7 +112,7 @@ public class CurrentTaskFragment extends TaskFragment {
         ModelSeparator separator = null;
         checkAdapter();
 
-        for (int i = 0; i < adapter.getItemCount(); i ++) {
+        for (int i = 0; i < adapter.getItemCount(); i++) {
             if (adapter.getItem(i).isTask()) {
                 ModelTask task = (ModelTask) adapter.getItem(i);
                 if (newTask.getDate() < task.getDate()) {
@@ -155,7 +155,6 @@ public class CurrentTaskFragment extends TaskFragment {
         }
 
 
-
         if (position != -1) {
 
             if (!adapter.getItem(position - 1).isTask()) {
@@ -185,8 +184,7 @@ public class CurrentTaskFragment extends TaskFragment {
             activity.dbHelper.saveTask(newTask);
         }
 
-  
-        
+
     }
 
     @Override
