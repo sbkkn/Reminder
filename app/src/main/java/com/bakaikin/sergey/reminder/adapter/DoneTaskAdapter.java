@@ -15,6 +15,7 @@ import com.bakaikin.sergey.reminder.Utils;
 import com.bakaikin.sergey.reminder.fragment.DoneTaskFragment;
 import com.bakaikin.sergey.reminder.model.Item;
 import com.bakaikin.sergey.reminder.model.ModelTask;
+import com.bakaikin.sergey.reminder.model.Task;
 
 import androidx.recyclerview.widget.RecyclerView;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -49,15 +50,15 @@ public class DoneTaskAdapter extends TaskAdapter {
 
         if (item.isTask()) {
             viewHolder.itemView.setEnabled(true);
-            final ModelTask task = (ModelTask) item;
+            final Task task = (Task) item;
             final TaskViewHolder taskViewHolder = (TaskViewHolder) viewHolder;
 
             final View itemView = taskViewHolder.itemView;
             final Resources resources = itemView.getResources();
 
-            taskViewHolder.title.setText(task.getTitle());
-            if (task.getDate() != 0) {
-                taskViewHolder.date.setText(Utils.getFullDate(task.getDate()));
+            taskViewHolder.title.setText(task.title);
+            if (task.date != 0) {
+                taskViewHolder.date.setText(Utils.getFullDate(task.date));
             } else {
                 taskViewHolder.date.setText(null);
             }
@@ -89,8 +90,8 @@ public class DoneTaskAdapter extends TaskAdapter {
                 @Override
                 public void onClick(View v) {
                     taskViewHolder.priority.setEnabled(false);
-                    task.setStatus(ModelTask.STATUS_CURRENT);
-                    getTaskFragment().activity.dbHelper.update().status(task.getTimeStamp(), ModelTask.STATUS_CURRENT);
+                    task.status = ModelTask.STATUS_CURRENT;
+                    getTaskFragment().activity.dbHelper.update().status(task.timeStamp, ModelTask.STATUS_CURRENT);
 
 
                     taskViewHolder.title.setTextColor(resources.getColor(R.color.primary_text_default_material_light));
@@ -107,7 +108,7 @@ public class DoneTaskAdapter extends TaskAdapter {
 
                         @Override
                         public void onAnimationEnd(Animator animation) {
-                            if (task.getStatus() != ModelTask.STATUS_DONE) {
+                            if (task.status != ModelTask.STATUS_DONE) {
 
                                 ObjectAnimator translationX = ObjectAnimator.ofFloat(itemView,
                                         "translationX", 0f, -itemView.getWidth());

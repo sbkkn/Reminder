@@ -15,6 +15,7 @@ import android.widget.EditText;
 import com.bakaikin.sergey.reminder.R;
 import com.bakaikin.sergey.reminder.alarm.AlarmHelper;
 import com.bakaikin.sergey.reminder.model.ModelTask;
+import com.bakaikin.sergey.reminder.model.Task;
 import com.google.android.material.textfield.TextInputLayout;
 import com.jakewharton.rxbinding3.widget.RxAdapterView;
 
@@ -45,7 +46,7 @@ public class AddingTaskDialogFragment extends DialogFragment {
     private Unbinder unbinder;
 
     public interface AddingTaskListener {
-        void onTaskAdded(ModelTask newTask);
+        void onTaskAdded(Task newTask);
 
         void onTaskAddingCancel();
     }
@@ -93,7 +94,7 @@ public class AddingTaskDialogFragment extends DialogFragment {
 
         builder.setView(container);
 
-        final ModelTask task = new ModelTask();
+        final Task task = new Task();
 
         ArrayAdapter<String> priorityAdapter = new ArrayAdapter<String>(getActivity(),
                 android.R.layout.simple_spinner_dropdown_item,
@@ -104,7 +105,7 @@ public class AddingTaskDialogFragment extends DialogFragment {
                 .subscribeOn(AndroidSchedulers.mainThread()) // is it needded?
                 .subscribe(position -> {
                     Log.v("spinner", position.toString());
-                    task.setPriority(position);
+                    task.priority = position;
                 });
 
 
@@ -160,15 +161,15 @@ public class AddingTaskDialogFragment extends DialogFragment {
         });
 
         builder.setPositiveButton(R.string.dialog_ok, (dialog, which) -> {
-            task.setTitle(etTitle.getText().toString());
-            task.setStatus(ModelTask.STATUS_CURRENT);
+            task.title = etTitle.getText().toString();
+            task.status = Task.STATUS_CURRENT;
             if (etDate.length() != 0 || etTime.length() != 0) {
-                task.setDate(calendar.getTimeInMillis());
+                task.date = calendar.getTimeInMillis();
 
                 AlarmHelper alarmHelper = AlarmHelper.getInstance();
                 alarmHelper.setAlarm(task);
             }
-            task.setStatus(ModelTask.STATUS_CURRENT);
+            task.status = Task.STATUS_CURRENT;
             addingTaskListener.onTaskAdded(task);
             dialog.dismiss();
         });

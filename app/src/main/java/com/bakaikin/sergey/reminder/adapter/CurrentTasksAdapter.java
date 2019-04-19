@@ -19,6 +19,7 @@ import com.bakaikin.sergey.reminder.fragment.TaskFragment;
 import com.bakaikin.sergey.reminder.model.Item;
 import com.bakaikin.sergey.reminder.model.ModelSeparator;
 import com.bakaikin.sergey.reminder.model.ModelTask;
+import com.bakaikin.sergey.reminder.model.Task;
 
 import androidx.recyclerview.widget.RecyclerView;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -68,15 +69,15 @@ case TYPE_SEPARATOR:
         final Resources resources = viewHolder.itemView.getResources();
         if (item.isTask()) {
             viewHolder.itemView.setEnabled(true);
-            final ModelTask task = (ModelTask) item;
+            final Task task = (Task) item;
             final TaskViewHolder taskViewHolder = (TaskViewHolder) viewHolder;
 
             final View itemView = taskViewHolder.itemView;
 
 
-            taskViewHolder.title.setText(task.getTitle());
-            if (task.getDate() != 0) {
-                taskViewHolder.date.setText(Utils.getFullDate(task.getDate()));
+            taskViewHolder.title.setText(task.title);
+            if (task.date != 0) {
+                taskViewHolder.date.setText(Utils.getFullDate(task.date));
             } else {
                 taskViewHolder.date.setText(null);
             }
@@ -85,7 +86,7 @@ case TYPE_SEPARATOR:
 
             taskViewHolder.priority.setEnabled(true);
 
- if (task.getDate() != 0 && task.getDate() < Calendar.getInstance().getTimeInMillis()) {
+ if (task.date != 0 && task.date < Calendar.getInstance().getTimeInMillis()) {
                 itemView.setBackgroundColor(resources.getColor(R.color.gray_200));
             } else {
                 itemView.setBackgroundColor(resources.getColor(R.color.gray_50));
@@ -119,8 +120,8 @@ case TYPE_SEPARATOR:
                 @Override
                 public void onClick(View v) {
                     taskViewHolder.priority.setEnabled(false);
-                    task.setStatus(ModelTask.STATUS_DONE);
-getTaskFragment().activity.dbHelper.update().status(task.getTimeStamp(), ModelTask.STATUS_DONE);
+                    task.status = ModelTask.STATUS_DONE;
+getTaskFragment().activity.dbHelper.update().status(task.timeStamp, ModelTask.STATUS_DONE);
 
 
                     taskViewHolder.title.setTextColor(resources.getColor(R.color.primary_text_disabled_material_light));
@@ -136,7 +137,7 @@ getTaskFragment().activity.dbHelper.update().status(task.getTimeStamp(), ModelTa
 
                         @Override
                         public void onAnimationEnd(Animator animation) {
-                            if (task.getStatus() == ModelTask.STATUS_DONE) {
+                            if (task.status == ModelTask.STATUS_DONE) {
                                 taskViewHolder.priority.setImageResource(R.drawable.ic_check_circle_white_48dp);
 
                                 ObjectAnimator translationX = ObjectAnimator.ofFloat(itemView,

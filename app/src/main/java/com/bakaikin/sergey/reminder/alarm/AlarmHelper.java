@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.bakaikin.sergey.reminder.model.ModelTask;
+import com.bakaikin.sergey.reminder.model.Task;
 
 /**
  * Created by Sergey on 27.09.2015.
@@ -29,7 +30,7 @@ public class AlarmHelper {
         alarmManager = (AlarmManager) context.getApplicationContext().getSystemService(Context.ALARM_SERVICE);
     }
 
-    public void setAlarm(ModelTask task) {
+    public void setAlarm(Task task) {
 //        Intent intent = new Intent(context, AlarmReceiver.class);
 //        intent.putExtra("title", task.getTitle());
 //        intent.putExtra("time_stamp", task.getTimeStamp());

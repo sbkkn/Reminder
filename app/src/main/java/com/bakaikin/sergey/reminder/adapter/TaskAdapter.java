@@ -7,6 +7,7 @@ import com.bakaikin.sergey.reminder.fragment.TaskFragment;
 import com.bakaikin.sergey.reminder.model.Item;
 import com.bakaikin.sergey.reminder.model.ModelSeparator;
 import com.bakaikin.sergey.reminder.model.ModelTask;
+import com.bakaikin.sergey.reminder.model.Task;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,11 +45,11 @@ public abstract class TaskAdapter extends RecyclerView.Adapter<RecyclerView.View
         notifyItemInserted(location);
     }
 
-public void updateTask(ModelTask newTask) {
+public void updateTask(Task newTask) {
         for (int i = 0; i < getItemCount(); i++) {
             if (getItem(i).isTask()) {
                 ModelTask task = (ModelTask) getItem(i);
-                if (newTask.getTimeStamp() == task.getTimeStamp()) {
+                if (newTask.timeStamp == task.getTimeStamp()) {
                     removeItem(i);
                     getTaskFragment().addTask(newTask, false);
                 }

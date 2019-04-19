@@ -7,10 +7,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 
 import com.bakaikin.sergey.reminder.model.ModelTask;
+import com.bakaikin.sergey.reminder.model.Task;
 
-/**
- * Created by Sergey on 20.09.2015.
- */
 public class DBHelper extends SQLiteOpenHelper {
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "reminder_database";
@@ -51,13 +49,13 @@ public class DBHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void saveTask(ModelTask task) {
+    public void saveTask(Task task) {
         ContentValues newValues = new ContentValues();
-        newValues.put(TASK_TITLE_COLUMN, task.getTitle());
-        newValues.put(TASK_DATE_COLUMN, task.getDate());
-        newValues.put(TASK_STATUS_COLUMN, task.getStatus());
-        newValues.put(TASK_PRIORITY_COLUMN, task.getPriority());
-        newValues.put(TASK_TIME_STAMP_COLUMN, task.getTimeStamp());
+        newValues.put(TASK_TITLE_COLUMN, task.title);
+        newValues.put(TASK_DATE_COLUMN, task.date);
+        newValues.put(TASK_STATUS_COLUMN, task.status);
+        newValues.put(TASK_PRIORITY_COLUMN, task.priority);
+        newValues.put(TASK_TIME_STAMP_COLUMN, task.timeStamp);
 
         getWritableDatabase().insert(TASK_TABLE, null, newValues);
     }

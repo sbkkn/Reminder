@@ -18,6 +18,7 @@ import com.bakaikin.sergey.reminder.fragment.DoneTaskFragment;
 import com.bakaikin.sergey.reminder.fragment.SplashFragment;
 import com.bakaikin.sergey.reminder.fragment.TaskFragment;
 import com.bakaikin.sergey.reminder.model.ModelTask;
+import com.bakaikin.sergey.reminder.model.Task;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
@@ -199,7 +200,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onTaskAdded(ModelTask newTask) {
+    public void onTaskAdded(Task newTask) {
         currentTaskFragment.addTask(newTask, true);
     }
 
@@ -210,19 +211,20 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onTaskDone(ModelTask task) {
+    public void onTaskDone(Task task) {
         doneTaskFragment.addTask(task, false);
     }
 
     @Override
-    public void onTaskRestore(ModelTask task) {
+    public void onTaskRestore(Task task) {
         currentTaskFragment.addTask(task, false);
     }
 
     @Override
-    public void onTaskEdited(ModelTask updatedTask) {
+    public void onTaskEdited(Task updatedTask) {
         currentTaskFragment.updateTask(updatedTask);
-        dbHelper.update().task(updatedTask);
+//        dbHelper.update().task(updatedTask);
+        ((MyApplication)getApplication()).appDatabase.taskDao().updateTask(updatedTask);
     }
 
 }

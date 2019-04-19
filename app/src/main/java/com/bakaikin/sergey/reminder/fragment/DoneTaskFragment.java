@@ -8,10 +8,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bakaikin.sergey.reminder.MyApplication;
 import com.bakaikin.sergey.reminder.R;
 import com.bakaikin.sergey.reminder.adapter.DoneTaskAdapter;
 import com.bakaikin.sergey.reminder.database.DBHelper;
 import com.bakaikin.sergey.reminder.model.ModelTask;
+import com.bakaikin.sergey.reminder.model.Task;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +34,7 @@ public class DoneTaskFragment extends TaskFragment {
     OnTaskRestoreListner onTaskRestoreListner;
 
     public interface OnTaskRestoreListner {
-        void onTaskRestore(ModelTask task);
+        void onTaskRestore(Task task);
     }
 
     @Override
@@ -68,11 +70,15 @@ public class DoneTaskFragment extends TaskFragment {
     public void findTasks(String title) {
         checkAdapter();
         adapter.removeAllItems();
-        List<ModelTask> tasks = new ArrayList<>();
-        tasks.addAll(activity.dbHelper.query().getTasks(DBHelper.SELECTION_LIKE_TITLE + " AND "
-                + DBHelper.SELECTION_STATUS, new String[]{"%" + title + "%",
-                Integer.toString(ModelTask.STATUS_DONE)}, DBHelper.TASK_DATE_COLUMN));
-        for (int i = 0; i < tasks.size(); i++) {
+        List<Task> tasks = new ArrayList<>();
+//        tasks.addAll(activity.dbHelper.query().getTasks(DBHelper.SELECTION_LIKE_TITLE + " AND "
+//                + DBHelper.SELECTION_STATUS, new String[]{"%" + title + "%",
+//                Integer.toString(ModelTask.STATUS_DONE)}, DBHelper.TASK_DATE_COLUMN));
+
+        tasks.addAll( ((MyApplication)getActivity().getApplication()).getDatabase().taskDao().getAll() );
+
+
+    for (int i = 0; i < tasks.size(); i++) {
             addTask(tasks.get(i), false);
         }
     }
@@ -89,9 +95,10 @@ public class DoneTaskFragment extends TaskFragment {
     public void addTaskFromDB() {
         checkAdapter();
         adapter.removeAllItems();
-        List<ModelTask> tasks = new ArrayList<>();
-        tasks.addAll(activity.dbHelper.query().getTasks(DBHelper.SELECTION_STATUS,
-                new String[]{Integer.toString(ModelTask.STATUS_DONE)}, DBHelper.TASK_DATE_COLUMN));
+        List<Task> tasks = new ArrayList<>();
+//        tasks.addAll(activity.dbHelper.query().getTasks(DBHelper.SELECTION_STATUS,
+//                new String[]{Integer.toString(ModelTask.STATUS_DONE)}, DBHelper.TASK_DATE_COLUMN));
+        tasks.addAll( ((MyApplication)getActivity().getApplication()).getDatabase().taskDao().getAll() );
 
         for (int i = 0; i < tasks.size(); i++) {
             addTask(tasks.get(i), false);
@@ -100,14 +107,14 @@ public class DoneTaskFragment extends TaskFragment {
 
 
     @Override
-    public void addTask(ModelTask newTask, boolean saveToDB) {
+    public void addTask(Task newTask, boolean saveToDB) {
         int position = -1;
         checkAdapter();
 
         for (int i = 0; i < adapter.getItemCount(); i ++) {
             if (adapter.getItem(i).isTask()) {
                 ModelTask task = (ModelTask) adapter.getItem(i);
-                if (newTask.getDate() < task.getDate()) {
+                if (newTask.date < task.getDate()) {
                     position = i;
                     break;
                 }
@@ -126,8 +133,8 @@ public class DoneTaskFragment extends TaskFragment {
     }
 
     @Override
-    public void moveTask(ModelTask task) {
-        if (task.getDate()!=0)
+    public void moveTask(Task task) {
+        if (task.date!=0)
         {
             alarmHelper.setAlarm(task);
         }

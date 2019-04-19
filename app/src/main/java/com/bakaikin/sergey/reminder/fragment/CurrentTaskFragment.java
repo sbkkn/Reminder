@@ -6,11 +6,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bakaikin.sergey.reminder.MyApplication;
 import com.bakaikin.sergey.reminder.R;
 import com.bakaikin.sergey.reminder.adapter.CurrentTasksAdapter;
 import com.bakaikin.sergey.reminder.database.DBHelper;
 import com.bakaikin.sergey.reminder.model.ModelSeparator;
 import com.bakaikin.sergey.reminder.model.ModelTask;
+import com.bakaikin.sergey.reminder.model.Task;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -32,7 +34,7 @@ public class CurrentTaskFragment extends TaskFragment {
     }
 
     public interface OnTaskDoneListner {
-        void onTaskDone(ModelTask task);
+        void onTaskDone(Task task);
     }
 
     @Override
@@ -74,13 +76,15 @@ public class CurrentTaskFragment extends TaskFragment {
         checkAdapter();
         adapter.removeAllItems();
         List<ModelTask> tasks = new ArrayList<>();
+        List<Task> tasksList = new ArrayList<>();
         tasks.addAll(activity.dbHelper.query().getTasks(DBHelper.SELECTION_LIKE_TITLE + " AND "
                         + DBHelper.SELECTION_STATUS + " OR " + DBHelper.SELECTION_STATUS,
                 new String[]{"%" + title + "%", Integer.toString(ModelTask.STATUS_CURRENT),
                         Integer.toString(ModelTask.STATUS_OVERDUE)}, DBHelper.TASK_DATE_COLUMN));
 
+        tasksList.addAll((((MyApplication)getActivity().getApplication()).getDatabase()).taskDao().getAll());
         for (int i = 0; i < tasks.size(); i++) {
-            addTask(tasks.get(i), false);
+            addTask(tasksList.get(i), false);
         }
     }
 
@@ -97,17 +101,22 @@ public class CurrentTaskFragment extends TaskFragment {
         checkAdapter();
         adapter.removeAllItems();
         List<ModelTask> tasks = new ArrayList<>();
+        List<Task> taskList = new ArrayList<>();
+
         tasks.addAll(activity.dbHelper.query().getTasks(DBHelper.SELECTION_STATUS + " OR "
                 + DBHelper.SELECTION_STATUS, new String[]{Integer.toString(ModelTask.STATUS_CURRENT),
                 Integer.toString(ModelTask.STATUS_OVERDUE)}, DBHelper.TASK_DATE_COLUMN));
+
+        taskList.addAll((((MyApplication)getActivity().getApplication()).getDatabase()).taskDao().getAll());
+
         for (int i = 0; i < tasks.size(); i++) {
-            addTask(tasks.get(i), false);
+//            addTask(tasks.get(i), false);
+            addTask(taskList.get(i), false);
         }
     }
 
-
     @Override
-    public void addTask(ModelTask newTask, boolean saveToDB) {
+    public void addTask(Task newTask, boolean saveToDB) {
         int position = -1;
         ModelSeparator separator = null;
         checkAdapter();
@@ -115,38 +124,37 @@ public class CurrentTaskFragment extends TaskFragment {
         for (int i = 0; i < adapter.getItemCount(); i++) {
             if (adapter.getItem(i).isTask()) {
                 ModelTask task = (ModelTask) adapter.getItem(i);
-                if (newTask.getDate() < task.getDate()) {
+                if (newTask.date < task.getDate()) {
                     position = i;
                     break;
                 }
             }
         }
 
-
-        if (newTask.getDate() != 0) {
+        if (newTask.date != 0) {
             Calendar calendar = Calendar.getInstance();
-            calendar.setTimeInMillis(newTask.getDate());
+            calendar.setTimeInMillis(newTask.date);
 
             if (calendar.get(Calendar.DAY_OF_YEAR) < Calendar.getInstance().get(Calendar.DAY_OF_YEAR)) {
-                newTask.setDateStatus(ModelSeparator.TYPE_OVERDUE);
+                newTask.status = ModelSeparator.TYPE_OVERDUE;
                 if (!adapter.containsSeparatorOverdue) {
                     adapter.containsSeparatorOverdue = true;
                     separator = new ModelSeparator(ModelSeparator.TYPE_OVERDUE);
                 }
             } else if (calendar.get(Calendar.DAY_OF_YEAR) == Calendar.getInstance().get(Calendar.DAY_OF_YEAR)) {
-                newTask.setDateStatus(ModelSeparator.TYPE_TODAY);
+                newTask.dateStatus = ModelSeparator.TYPE_TODAY;
                 if (!adapter.containsSeparatorToday) {
                     adapter.containsSeparatorToday = true;
                     separator = new ModelSeparator(ModelSeparator.TYPE_TODAY);
                 }
             } else if (calendar.get(Calendar.DAY_OF_YEAR) == Calendar.getInstance().get(Calendar.DAY_OF_YEAR) + 1) {
-                newTask.setDateStatus(ModelSeparator.TYPE_TOMORROW);
+                newTask.dateStatus = ModelSeparator.TYPE_TOMORROW;
                 if (!adapter.containsSeparatorTomorrow) {
                     adapter.containsSeparatorTomorrow = true;
                     separator = new ModelSeparator(ModelSeparator.TYPE_TOMORROW);
                 }
             } else if (calendar.get(Calendar.DAY_OF_YEAR) > Calendar.getInstance().get(Calendar.DAY_OF_YEAR) + 1) {
-                newTask.setDateStatus(ModelSeparator.TYPE_TOMORROW);
+                newTask.dateStatus = ModelSeparator.TYPE_TOMORROW;
                 if (!adapter.containsSeparatorFuture) {
                     adapter.containsSeparatorFuture = true;
                     separator = new ModelSeparator(ModelSeparator.TYPE_FUTURE);
@@ -160,10 +168,10 @@ public class CurrentTaskFragment extends TaskFragment {
             if (!adapter.getItem(position - 1).isTask()) {
                 if (position - 2 >= 0 && adapter.getItem(position - 2).isTask()) {
                     ModelTask task = (ModelTask) adapter.getItem(position - 2);
-                    if (task.getDateStatus() == newTask.getDateStatus()) {
+                    if (task.getDateStatus() == newTask.dateStatus) {
                         position -= 1;
                     }
-                } else if (position - 2 < 0 && newTask.getDate() == 0) {
+                } else if (position - 2 < 0 && newTask.date == 0) {
                     position -= 1;
                 }
             }
@@ -188,8 +196,8 @@ public class CurrentTaskFragment extends TaskFragment {
     }
 
     @Override
-    public void moveTask(ModelTask task) {
-        alarmHelper.removeAlarm(task.getTimeStamp());
+    public void moveTask(Task task) {
+        alarmHelper.removeAlarm(task.timeStamp);
         onTaskDoneListner.onTaskDone(task);
     }
 }

@@ -24,6 +24,7 @@ import com.bakaikin.sergey.reminder.R;
 import com.bakaikin.sergey.reminder.Utils;
 import com.bakaikin.sergey.reminder.alarm.AlarmHelper;
 import com.bakaikin.sergey.reminder.model.ModelTask;
+import com.bakaikin.sergey.reminder.model.Task;
 import com.google.android.material.textfield.TextInputLayout;
 
 /**
@@ -31,14 +32,14 @@ import com.google.android.material.textfield.TextInputLayout;
  */
 public class EditTaskDialogFragment extends DialogFragment {
 
-    public static EditTaskDialogFragment newInstance(ModelTask task) {
+    public static EditTaskDialogFragment newInstance(Task task) {
         EditTaskDialogFragment editTaskDialogFragment = new EditTaskDialogFragment();
 
         Bundle args = new Bundle();
-        args.putString("title", task.getTitle());
-        args.putLong("date", task.getDate());
-        args.putInt("priority", task.getPriority());
-        args.putLong("time_stamp", task.getTimeStamp());
+        args.putString("title", task.title);
+        args.putLong("date", task.date);
+        args.putInt("priority", task.priority);
+        args.putLong("time_stamp", task.timeStamp);
 
         editTaskDialogFragment.setArguments(args);
         return editTaskDialogFragment;
@@ -47,7 +48,7 @@ public class EditTaskDialogFragment extends DialogFragment {
     private EditingTaskListener editingTaskListener;
 
     public interface EditingTaskListener {
-        void onTaskEdited(ModelTask updatedTask);
+        void onTaskEdited(Task updatedTask);
     }
 
     @Override
@@ -69,7 +70,12 @@ public class EditTaskDialogFragment extends DialogFragment {
         int priority = args.getInt("priority", 0);
         long timeStamp = args.getLong("time_stamp", 0);
 
-        final ModelTask task = new ModelTask(title, date, priority, 0, timeStamp);
+        final Task task = new Task();
+        task.title = title;
+        task.date = date;
+        task.priority = priority;
+        task.status = 0;
+        task.timeStamp = timeStamp;
 
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
@@ -91,11 +97,11 @@ public class EditTaskDialogFragment extends DialogFragment {
         Spinner spPriority = (Spinner) container.findViewById(R.id.spDialogTaskPriority);
 
 
-        etTitle.setText(task.getTitle());
+        etTitle.setText(task.title);
         etTitle.setSelection(etTitle.length());
-        if (task.getDate() != 0) {
-            etDate.setText(Utils.getDate(task.getDate()));
-            etTime.setText(Utils.getTime(task.getDate()));
+        if (task.date != 0) {
+            etDate.setText(Utils.getDate(task.date));
+            etTime.setText(Utils.getTime(task.date));
         }
 
 
@@ -112,12 +118,12 @@ public class EditTaskDialogFragment extends DialogFragment {
 
         spPriority.setAdapter(priorityAdapter);
 
-        spPriority.setSelection(task.getPriority());
+        spPriority.setSelection(task.priority);
 
         spPriority.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                task.setPriority(position);
+                task.priority = position;
             }
 
             @Override
@@ -129,7 +135,7 @@ public class EditTaskDialogFragment extends DialogFragment {
         final Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY, calendar.get(Calendar.HOUR_OF_DAY) + 1);
         if (etDate.length() != 0 || etTime.length() != 0) {
-            calendar.setTimeInMillis(task.getDate());
+            calendar.setTimeInMillis(task.date);
         }
 
         etDate.setOnClickListener(new View.OnClickListener() {
@@ -184,15 +190,15 @@ public class EditTaskDialogFragment extends DialogFragment {
         builder.setPositiveButton(R.string.dialog_ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                task.setTitle(etTitle.getText().toString());
-                task.setStatus(ModelTask.STATUS_CURRENT);
+                task.title = etTitle.getText().toString();
+                task.status = Task.STATUS_CURRENT;
                 if (etDate.length() != 0 || etTime.length() != 0) {
-                    task.setDate(calendar.getTimeInMillis());
+                    task.date = calendar.getTimeInMillis();
 
                     AlarmHelper alarmHelper = AlarmHelper.getInstance();
                     alarmHelper.setAlarm(task);
                 }
-                task.setStatus(ModelTask.STATUS_CURRENT);
+                task.status = Task.STATUS_CURRENT;
                 editingTaskListener.onTaskEdited(task);
                 dialog.dismiss();
             }

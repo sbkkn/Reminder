@@ -4,9 +4,6 @@ import com.bakaikin.sergey.reminder.R;
 
 import java.util.Date;
 
-/**
- * Created by Sergey on 19.09.2015.
- */
 public class ModelTask implements Item {
 
     public static final int PRIORITY_LOW = 0;

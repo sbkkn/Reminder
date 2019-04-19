@@ -7,12 +7,14 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.bakaikin.sergey.reminder.MainActivity;
+import com.bakaikin.sergey.reminder.MyApplication;
 import com.bakaikin.sergey.reminder.R;
 import com.bakaikin.sergey.reminder.adapter.TaskAdapter;
 import com.bakaikin.sergey.reminder.alarm.AlarmHelper;
 import com.bakaikin.sergey.reminder.dialog.EditTaskDialogFragment;
 import com.bakaikin.sergey.reminder.model.Item;
 import com.bakaikin.sergey.reminder.model.ModelTask;
+import com.bakaikin.sergey.reminder.model.Task;
 import com.google.android.material.snackbar.Snackbar;
 
 import androidx.fragment.app.Fragment;
@@ -46,9 +48,9 @@ public abstract class TaskFragment extends Fragment {
         addTaskFromDB();
     }
 
- public abstract void addTask(ModelTask newTask, boolean saveToDB);
+ public abstract void addTask(Task newTask, boolean saveToDB);
 
-    public void updateTask(ModelTask task) {
+    public void updateTask(Task task) {
         adapter.updateTask(task);
     }
 
@@ -60,9 +62,9 @@ public abstract class TaskFragment extends Fragment {
         Item item = adapter.getItem(location);
 
         if (item.isTask()) {
-            ModelTask removingTask = (ModelTask) item;
+            Task removingTask = (Task) item;
 
-            final long timeStamp = removingTask.getTimeStamp();
+            final long timeStamp = removingTask.timeStamp;
             final boolean[] isRemoved = {false};
 
             dialogBuilder.setPositiveButton(R.string.dialog_ok, new DialogInterface.OnClickListener() {
@@ -77,7 +79,8 @@ public abstract class TaskFragment extends Fragment {
                     snackbar.setAction(R.string.dialog_cancel, new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            addTask(activity.dbHelper.query().getTask(timeStamp), false);
+//                            addTask(activity.dbHelper.query().getTask(timeStamp), false);
+                            addTask( ((MyApplication)getActivity().getApplication()).getDatabase().taskDao().getTask(timeStamp),false);
                             isRemoved[0] = false;
                         }
                     });
@@ -112,7 +115,7 @@ public abstract class TaskFragment extends Fragment {
         dialogBuilder.show();
  }
 
-    public void showTaskEditDialog(ModelTask task) {
+    public void showTaskEditDialog(Task task) {
         DialogFragment editingTaskDialog = EditTaskDialogFragment.newInstance(task);
         editingTaskDialog.show(getActivity().getSupportFragmentManager(), "EditTaskDialogFragment");
     }
@@ -124,5 +127,5 @@ public abstract class TaskFragment extends Fragment {
 
     public abstract void addTaskFromDB();
 
-    public abstract void moveTask(ModelTask task);
+    public abstract void moveTask(Task task);
 }
